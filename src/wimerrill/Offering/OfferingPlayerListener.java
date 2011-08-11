@@ -41,6 +41,10 @@ public class OfferingPlayerListener extends PlayerListener {
 									Parameter params = gift.getReward().getAttr(name);
 									rewardAction.process(name, player, params, block);
 								}
+								if (plugin.decay) {
+									int id = gift.material.getId();
+									player.getInventory().removeItem(new ItemStack(id, gift.amount));
+								}
 							}
 							else {
 								player.sendMessage(ChatColor.RED + "You don't have permission to receive this reward");

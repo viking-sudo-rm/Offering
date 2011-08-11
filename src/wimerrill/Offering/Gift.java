@@ -10,10 +10,12 @@ public class Gift {
 	public String rewardname;
 	private Reward reward;
 	public Boolean rewardexists;
+	public int amount;
 	
-	public Gift(Material imaterial, String ireward,ArrayList<Reward> possiblerewards) {
+	public Gift(Material imaterial, String ireward,ArrayList<Reward> possiblerewards, int iamount) {
 		material = imaterial;
 		rewardname = ireward;
+		amount = iamount;
 		rewardexists = false;
 		for (Reward r : possiblerewards) {
 			if (r.name.equals(rewardname)) {

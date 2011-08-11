@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class RewardAction {
 	
@@ -18,7 +20,6 @@ public class RewardAction {
 		for (String p1 : p.getParams()) {
 			if (p1.startsWith("$") && p1.length() > 1) {
 				parameter.add(searchSigns(block,p1));
-				player.sendMessage(searchSigns(block,p1));
 			}
 			else {
 				parameter.add(p1);
@@ -29,13 +30,13 @@ public class RewardAction {
 		if (name.equals("heal")) { doHeal(player,parameter); }
 		if (name.equals("time")) { doTime(player,parameter); }
 		if (name.equals("weather")) { doWeather(player,parameter); }
+		if (name.equals("give")) { doGive(player,parameter); }
 		/*
 		 * 
 		 * TODO: add error catching
 		 * TODO: add custom decays/no decays
-		 * TODO: add integer for heal
 		 * TODO: add more rewards
-		 * TODO: test rewards
+		 * TODO: add custom messages
 		 * 
 		 */
 	}
@@ -111,7 +112,18 @@ public class RewardAction {
 	}
 	
 	private void doTime(Player player, ArrayList<String> parameter) {
-		notYetSupported(player);
+		World world = player.getWorld();
+		int t = Integer.parseInt(safeGet(parameter,0));
+		world.setTime(t);
+		player.sendMessage("The sun has obeyed!");
+	}
+	
+	private void doGive(Player player, ArrayList<String> parameter) {
+		String m = safeGet(parameter,0);
+		int n = Integer.parseInt(safeGet(parameter,1));
+		int material = Material.getMaterial(m).getId();
+		player.getInventory().addItem(new ItemStack(material,n));
+		player.sendMessage("Your inventory gets heavier!");
 	}
 	
 	private void doWeather(Player player, ArrayList<String> parameter) {

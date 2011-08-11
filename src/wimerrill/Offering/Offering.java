@@ -23,6 +23,7 @@ public class Offering extends JavaPlugin {
 	public ArrayList<Altar> altars = new ArrayList();
 	public ArrayList<Reward> rewards = new ArrayList();
 	public String clickType;
+	public Boolean decay;
 	public Boolean UsePermissions;
 	private static PermissionHandler Permissions;
 	
@@ -76,17 +77,24 @@ public class Offering extends JavaPlugin {
 				config.createNewFile();
 				console("Default config file 'config.yml' created in '/plugins/Offering'");
 				getConfiguration().setProperty("click-type","LEFT");
+				getConfiguration().setProperty("decay",true);
 				getConfiguration().setProperty("altars.GOLD_BLOCK.gifts.SLIME_BALL.reward", "tp");
 				getConfiguration().setProperty("altars.GOLD_BLOCK.gifts.CLAY_BALL.reward", "fullheal");
 				getConfiguration().setProperty("altars.GOLD_BLOCK.gifts.DIAMOND_SWORD.reward", "zeus");
+				getConfiguration().setProperty("altars.GOLD_BLOCK.gifts.CAKE.reward", "cookies");
+				getConfiguration().setProperty("altars.GOLD_BLOCK.gifts.WATCH.reward", "day");
+				getConfiguration().setProperty("altars.GOLD_BLOCK.gifts.WATCH.amount", 3);
 				getConfiguration().setProperty("rewards.tp.tp", "$x $y $z");
 				getConfiguration().setProperty("rewards.zeus.lightning", "$x $y $z");
 				getConfiguration().setProperty("rewards.fullheal.heal", 20);
+				getConfiguration().setProperty("rewards.cookies.give", "COOKIE 5");
+				getConfiguration().setProperty("rewards.day.time", 0);
 				getConfiguration().save();
 			}
 			catch (IOException e) { }
 		}
 		clickType = getConfiguration().getString("click-type","LEFT");
+		decay = getConfiguration().getBoolean("decay", true);
 		for (String rewardstring : getConfiguration().getKeys("rewards")) {
 			String reward = rewardstring;
 			HashMap<String,Parameter> pass = new HashMap();
@@ -103,7 +111,8 @@ public class Offering extends JavaPlugin {
 			for (String giftstring : getConfiguration().getKeys("altars." + altarstring + ".gifts")) {
 				Material m2 = Material.getMaterial(giftstring);
 				String reward = getConfiguration().getString("altars." + altarstring + ".gifts." + giftstring + ".reward");
-				gifts.add(new Gift(m2,reward,rewards));
+				int amount = getConfiguration().getInt("altars." + altarstring + ".gifts." + giftstring + ".amount",1);
+				gifts.add(new Gift(m2,reward,rewards,amount));
 			}
 			Material m = Material.getMaterial(altarstring);
 			altars.add(new Altar(m,gifts));
