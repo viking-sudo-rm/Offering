@@ -5,9 +5,14 @@ suggestions.
 More information about the project is available at bukkit.org.
 
 QUICK DOWNLOAD:
+<<<<<<< HEAD
 Download the Offering-v1.2.jar file, this is all you need. The rest is just source
 for any developers out there. To download it, click it, and then hit the link
 "View Raw" that appears.
+=======
+Download the Offering-v1.1.jar file, this is all you need. The rest is just source
+for any developers out there. Note - if there is a file with a version number over 1.1, then download that instead.
+>>>>>>> dcf62b0371fe7980854c9e46bddcd9a1bd2546e2
 
 NOTE:
 Ignore the .DS_Store files in some of the directories. These are just there because 
