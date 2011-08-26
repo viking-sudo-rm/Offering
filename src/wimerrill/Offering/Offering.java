@@ -52,7 +52,7 @@ public class Offering extends JavaPlugin {
 	            this.Permissions = ((Permissions) test).getHandler();
 	            this.console("Permissions detected");
 	        } else {
-	        	this.console("Permissions not detected; using default op-based system");
+	        	this.console("Permissions not detected; allowing anyone to access any altar");
 	        	UsePermissions = false;
 	        }
 	    }
@@ -62,7 +62,7 @@ public class Offering extends JavaPlugin {
 		if (UsePermissions) {
 			return this.Permissions.has(player,"Offering.rewards." + p);
 		}
-		return player.isOp();
+		return true;
 	}
 	
 	public void loadConfig() {
