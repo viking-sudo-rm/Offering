@@ -89,6 +89,11 @@ public class RewardAction {
 	}
 	
 	private void doLightning(Player player, ArrayList<String> parameter) {
+		final World world = player.getWorld();
+		final int x = Integer.parseInt(safeGet(parameter,0));
+		final int y = Integer.parseInt(safeGet(parameter,1));
+		final int z = Integer.parseInt(safeGet(parameter,2));
+		final Location location = new Location(world, x, y, z);
 		player.sendMessage("Zap!");
 		player.getWorld().strikeLightning(player.getLocation());
 	}
