@@ -1,21 +1,18 @@
 package wimerrill.Offering;
 
-import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Reward {
+	private ConcurrentHashMap<String, Parameter> args = new ConcurrentHashMap<String, Parameter>();
+	private String name;
 	
-	private HashMap<String, Parameter> args = new HashMap();
-	public Boolean hasArgs = false;
-	public String name;
-	
-	public Reward(String iname, HashMap<String, Parameter> pass) {
+	public Reward(String iname, ConcurrentHashMap<String, Parameter> pass) {
 		args = pass;
 		name = iname;
 	}
 	
-	public Parameter getAttr(String key) {
+	public Parameter getAttribute(String key) {
 		return args.get(key);
 	}
 	
@@ -23,4 +20,7 @@ public class Reward {
 		return args.keySet();
 	}
 	
+	public String getName(){
+		return this.name;
+	}
 }
