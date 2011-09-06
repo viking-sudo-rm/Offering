@@ -5,20 +5,19 @@ import java.util.ArrayList;
 import org.bukkit.Material;
 
 public class Gift {
-
 	public Material material;
 	public String rewardname;
 	private Reward reward;
-	public Boolean rewardexists;
+	public boolean rewardexists;
 	public int amount;
 	
-	public Gift(Material imaterial, String ireward,ArrayList<Reward> possiblerewards, int iamount) {
+	public Gift(Material imaterial, String ireward, ArrayList<Reward> possiblerewards, int iamount) {
 		material = imaterial;
 		rewardname = ireward;
 		amount = iamount;
 		rewardexists = false;
 		for (Reward r : possiblerewards) {
-			if (r.name.equals(rewardname)) {
+			if (r.getName().equals(rewardname)) {
 				reward = r;
 				rewardexists = true;
 			}

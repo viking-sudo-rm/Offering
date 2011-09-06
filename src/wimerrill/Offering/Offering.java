@@ -3,7 +3,7 @@ package wimerrill.Offering;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
@@ -19,59 +19,54 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 public class Offering extends JavaPlugin {
 	
 	public static final Logger log = Logger.getLogger("Minecraft");
-	public OfferingPlayerListener playerListener = new OfferingPlayerListener(this);
-	public ArrayList<Altar> altars = new ArrayList();
-	public ArrayList<Reward> rewards = new ArrayList();
+	private final OfferingPlayerListener playerListener = new OfferingPlayerListener(this);
+	public final ArrayList<Altar> altars = new ArrayList<Altar>();
+	private final ArrayList<Reward> rewards = new ArrayList<Reward>();
 	public String clickType;
-	public Boolean decay;
-	public Boolean UsePermissions;
+	public boolean decay;
+	//private boolean UsePermissions;
 	private static PermissionHandler Permissions;
 	
 	public void onEnable() {
-		PluginManager pm = getServer().getPluginManager();
+		final PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this);
 		
 		console("Plugin enabled");
 		
 		setupPermissions();
 		loadConfig();
-		
 	}
 	
 	public void onDisable() {
-		
 		console("Plugin disabled");
-		
 	}
 	
 	private void setupPermissions() {
-	    Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
-	    if (this.Permissions == null) {
+	    if (Permissions == null) {
+	    	final Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
 	        if (test != null) {
-	            UsePermissions = true;
-	            this.Permissions = ((Permissions) test).getHandler();
+	            Permissions = ((Permissions) test).getHandler();
 	            this.console("Permissions detected");
 	        } else {
 	        	this.console("Permissions not detected; allowing anyone to access any altar");
-	        	UsePermissions = false;
 	        }
 	    }
 	}
 	
 	public boolean can(Player player, String p) {
-		if (UsePermissions) {
-			return this.Permissions.has(player,"Offering.rewards." + p);
+		if (Permissions != null) {
+			return Permissions.has(player,"Offering.rewards." + p);
 		}
 		return true;
 	}
 	
 	public void loadConfig() {
-		File dir = new File("plugins/Offering");
+		final File dir = new File("plugins/Offering");
 		if (!dir.exists()) {
 			dir.mkdir();
 			console("Data folder 'Offering' created in '/plugins'");
 		}
-		File config = new File(dir,"config.yml");
+		final File config = new File(dir,"config.yml");
 		if (!config.exists()) {
 			try {
 				config.createNewFile();
@@ -95,19 +90,16 @@ public class Offering extends JavaPlugin {
 		}
 		clickType = getConfiguration().getString("click-type","LEFT");
 		decay = getConfiguration().getBoolean("decay", true);
-		for (String rewardstring : getConfiguration().getKeys("rewards")) {
-			String reward = rewardstring;
-			HashMap<String,Parameter> pass = new HashMap();
-			for (String key : getConfiguration().getKeys("rewards." + rewardstring)) {
+		for (final String rewardstring : getConfiguration().getKeys("rewards")) {
+			ConcurrentHashMap<String,Parameter> pass = new ConcurrentHashMap<String, Parameter>();
+			for (final String key : getConfiguration().getKeys("rewards." + rewardstring)) {
 				String val = getConfiguration().getString("rewards." + rewardstring + "." + key);
-				String[] args;
 				pass.put(key, new Parameter(val));
-	
 			}
 			rewards.add(new Reward(rewardstring,pass));
 		}
 		for (String altarstring : getConfiguration().getKeys("altars")) {
-			ArrayList<Gift> gifts = new ArrayList();
+			ArrayList<Gift> gifts = new ArrayList<Gift>();
 			for (String giftstring : getConfiguration().getKeys("altars." + altarstring + ".gifts")) {
 				Material m2 = Material.getMaterial(giftstring);
 				String reward = getConfiguration().getString("altars." + altarstring + ".gifts." + giftstring + ".reward");
