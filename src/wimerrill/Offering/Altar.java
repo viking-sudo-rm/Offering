@@ -5,13 +5,20 @@ import java.util.ArrayList;
 import org.bukkit.Material;
 
 public class Altar {
-	
-	public Material material;
-	public ArrayList<Gift> gifts;
+	private Material material;
+	private ArrayList<Gift> gifts;
 	
 	public Altar(Material imaterial, ArrayList<Gift> igifts) {
 		material = imaterial;
 		gifts = igifts;
+	}
+	
+	public Material getMaterial() {
+		return this.material;
+	}
+	
+	public ArrayList<Gift> getGifts() {
+		return this.gifts;
 	}
 	
 }
