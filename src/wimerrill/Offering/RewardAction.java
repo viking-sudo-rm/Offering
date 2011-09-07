@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,6 +32,8 @@ public class RewardAction {
 		if (name.equals("time")) { doTime(player,parameter); }
 		if (name.equals("weather")) { doWeather(player,parameter); }
 		if (name.equals("give")) { doGive(player,parameter); }
+		if (name.equals("worldtp")) { doWorldTp(player,parameter); }
+		if (name.equals("spawnmob")) { doSpawnMob(player,parameter,block); }
 		/*
 		 * 
 		 * TODO: add error catching
@@ -108,7 +111,12 @@ public class RewardAction {
 	private void doHeal(Player player, ArrayList<String> parameter) {
 		player.sendMessage("Feeling better?");
 		int a = Integer.parseInt(safeGet(parameter,0));
-		player.setHealth(a);
+		int h = player.getHealth() + a;
+		if (h > 20)
+			h = 20;
+		if (h < 0)
+			h = 0;
+		player.setHealth(h);
 	}
 	
 	private void doTime(Player player, ArrayList<String> parameter) {
@@ -127,17 +135,45 @@ public class RewardAction {
 	}
 	
 	private void doWeather(Player player, ArrayList<String> parameter) {
-		String arg = safeGet(parameter,0);
-		World world = player.getWorld();
-		if (arg.equals("rain")) {
+		final World world = player.getWorld();
+		final String weatherType = safeGet(parameter,0);
+		if (weatherType.equalsIgnoreCase("rain")) {
+			world.setThundering(false);
 			world.setStorm(true);
 			player.sendMessage("Cold front approaching!");
-			
-		}
-		else {
+		} else if (weatherType.equalsIgnoreCase("thunder")) {
+			world.setStorm(true);
+			world.setThundering(true);
+			player.sendMessage("Electrical storm approaching!");
+		} else if (weatherType.equalsIgnoreCase("clear")) {
+			world.setThundering(false);
 			world.setStorm(false);
 			player.sendMessage("Warm front approaching!");
+		} else {
+			player.sendMessage(ChatColor.RED + "Weather can be rain, thunder, or clear.");
 		}
+	}
+	
+	private void doSpawnMob(Player player, ArrayList<String> parameter, Block block) {
+		Location l = block.getLocation().clone();
+		l.setY(l.getY() + 1);
+		String arg = safeGet(parameter,0);
+		player.getWorld().spawnCreature(l,CreatureType.fromName(arg));
+		player.sendMessage("A " + arg + " has been born!");
+	}
+	
+	private void doWorldTp(Player player, ArrayList<String> parameter) {
+		Location location = player.getLocation().clone();
+		int x = Integer.parseInt(safeGet(parameter,1));
+		int y = Integer.parseInt(safeGet(parameter,2));
+		int z = Integer.parseInt(safeGet(parameter,3));
+		String worldname = safeGet(parameter,0);
+		location.setX(x);
+		location.setY(y);
+		location.setZ(z);
+		location.setWorld(player.getServer().getWorld(worldname));
+		player.sendMessage("Time seems to ripple as you are pulled through the fabric of time...");
+		player.teleport(location);
 	}
 	
 }
