@@ -28,7 +28,6 @@ public class RewardAction {
 				parameter.add(p1);
 			}
 		}
-<<<<<<< HEAD
 		if (name.equals("tp")) { doTp(player,parameter); }
 		if (name.equals("lightning")) { doLightning(player,parameter); }
 		if (name.equals("heal")) { doHeal(player,parameter); }
@@ -37,14 +36,12 @@ public class RewardAction {
 		if (name.equals("give")) { doGive(player,parameter); }
 		if (name.equals("worldtp")) { doWorldTp(player,parameter); }
 		if (name.equals("spawnmob")) { doSpawnMob(player,parameter,block); }
-=======
 		if (name.equalsIgnoreCase("tp")) doTp(player,parameter);
 		if (name.equalsIgnoreCase("lightning")) doLightning(player,parameter);
 		if (name.equalsIgnoreCase("heal")) doHeal(player,parameter);
 		if (name.equalsIgnoreCase("time")) doTime(player,parameter);
 		if (name.equalsIgnoreCase("weather")) doWeather(player,parameter);
 		if (name.equalsIgnoreCase("give")) doGive(player,parameter);
->>>>>>> 2f35646b4ea41f35136387573d0d2df34f481bc5
 		/*
 		 * TODO: add error catching
 		 * TODO: add custom decays/no decays
