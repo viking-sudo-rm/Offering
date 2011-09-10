@@ -28,14 +28,8 @@ public class RewardAction {
 				parameter.add(p1);
 			}
 		}
-		if (name.equals("tp")) { doTp(player,parameter); }
-		if (name.equals("lightning")) { doLightning(player,parameter); }
-		if (name.equals("heal")) { doHeal(player,parameter); }
-		if (name.equals("time")) { doTime(player,parameter); }
-		if (name.equals("weather")) { doWeather(player,parameter); }
-		if (name.equals("give")) { doGive(player,parameter); }
-		if (name.equals("worldtp")) { doWorldTp(player,parameter); }
-		if (name.equals("spawnmob")) { doSpawnMob(player,parameter,block); }
+		if (name.equalsIgnoreCase("worldtp")) doWorldTp(player,parameter);
+		if (name.equalsIgnoreCase("spawnmob")) doSpawnMob(player,parameter,block);
 		if (name.equalsIgnoreCase("tp")) doTp(player,parameter);
 		if (name.equalsIgnoreCase("lightning")) doLightning(player,parameter);
 		if (name.equalsIgnoreCase("heal")) doHeal(player,parameter);
@@ -104,23 +98,22 @@ public class RewardAction {
 		final int z = Integer.parseInt(safeGet(parameter,2));
 		final Location location = new Location(world, x, y, z);
 		player.sendMessage("Zap!");
-		player.getWorld().strikeLightning(player.getLocation());
+		player.getWorld().strikeLightning(location);
 	}
 	
 	private void doHeal(Player player, ArrayList<String> parameter) {
 		final int a = Integer.parseInt(safeGet(parameter,0));
 		player.sendMessage("Feeling better?");
-<<<<<<< HEAD
-		int a = Integer.parseInt(safeGet(parameter,0));
-		int h = player.getHealth() + a;
-		if (h > 20)
-			h = 20;
-		if (h < 0)
-			h = 0;
-		player.setHealth(h);
-=======
-		player.setHealth(a);
->>>>>>> 2f35646b4ea41f35136387573d0d2df34f481bc5
+		
+		if (a > 0)
+		{
+			final int h = player.getHealth() + a;
+			player.setHealth(h > 20 ? 20 : h);
+		}
+		if (a < 0)
+		{
+			player.damage(a);
+		}
 	}
 	
 	private void doTime(Player player, ArrayList<String> parameter) {
@@ -155,11 +148,7 @@ public class RewardAction {
 			world.setStorm(false);
 			player.sendMessage("Warm front approaching!");
 		} else {
-<<<<<<< HEAD
 			player.sendMessage(ChatColor.RED + "Weather can be rain, thunder, or clear.");
-=======
-			player.sendMessage("Weather can be rain, thunder, or clear");
->>>>>>> 2f35646b4ea41f35136387573d0d2df34f481bc5
 		}
 	}
 	
